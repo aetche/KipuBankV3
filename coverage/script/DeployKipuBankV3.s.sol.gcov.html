@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - lcov.info - script/DeployKipuBankV3.s.sol</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory script">script</a> - DeployKipuBankV3.s.sol<span style="font-size: 80%;"> (source / <a href="DeployKipuBankV3.s.sol.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">lcov.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2025-11-10 04:03:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : // SPDX-License-Identifier: MIT</span>
+<span id="L2"><span class="lineNum">       2</span>              : pragma solidity ^0.8.20;</span>
+<span id="L3"><span class="lineNum">       3</span>              : </span>
+<span id="L4"><span class="lineNum">       4</span>              : import {Script} from &quot;forge-std/Script.sol&quot;;</span>
+<span id="L5"><span class="lineNum">       5</span>              : import {KipuBankV3} from &quot;../src/KipuBankV3.sol&quot;;</span>
+<span id="L6"><span class="lineNum">       6</span>              : import {</span>
+<span id="L7"><span class="lineNum">       7</span>              :     AggregatorV3Interface</span>
+<span id="L8"><span class="lineNum">       8</span>              : } from &quot;@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol&quot;;</span>
+<span id="L9"><span class="lineNum">       9</span>              : </span>
+<span id="L10"><span class="lineNum">      10</span>              : contract DeployKipuBankV3 is Script {</span>
+<span id="L11"><span class="lineNum">      11</span> <span class="tlaUNC">           0 :     function run() external returns (KipuBankV3 _kipuBank) {</span></span>
+<span id="L12"><span class="lineNum">      12</span> <span class="tlaUNC">           0 :         KipuBankV3 kipuBank;</span></span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaUNC">           0 :         address _user = vm.envAddress(&quot;USER&quot;);</span></span>
+<span id="L14"><span class="lineNum">      14</span> <span class="tlaUNC">           0 :         address _router = address(0xeE567Fe1712Faf6149d80dA1E6934E354124CfE3); // uniswapV2Router02</span></span>
+<span id="L15"><span class="lineNum">      15</span> <span class="tlaUNC">           0 :         address _usdc = address(0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238); // usdc</span></span>
+<span id="L16"><span class="lineNum">      16</span>              : </span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaUNC">           0 :         AggregatorV3Interface _ethOracle = AggregatorV3Interface(</span></span>
+<span id="L18"><span class="lineNum">      18</span>              :             0x694AA1769357215DE4FAC081bf1f309aDC325306</span>
+<span id="L19"><span class="lineNum">      19</span>              :         );</span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaUNC">           0 :         uint256 _withdrawalLimit = 5000 * 10 ** 6; // 5000 USDC (6 decimals)</span></span>
+<span id="L21"><span class="lineNum">      21</span> <span class="tlaUNC">           0 :         uint256 _bankCap = 10_000 * 10 ** 6; // 10,000 USDC (6 decimals)</span></span>
+<span id="L22"><span class="lineNum">      22</span>              : </span>
+<span id="L23"><span class="lineNum">      23</span> <span class="tlaUNC">           0 :         vm.startBroadcast();</span></span>
+<span id="L24"><span class="lineNum">      24</span> <span class="tlaUNC">           0 :         kipuBank = new KipuBankV3(</span></span>
+<span id="L25"><span class="lineNum">      25</span>              :             _ethOracle,</span>
+<span id="L26"><span class="lineNum">      26</span>              :             _router,</span>
+<span id="L27"><span class="lineNum">      27</span>              :             _usdc,</span>
+<span id="L28"><span class="lineNum">      28</span>              :             _withdrawalLimit,</span>
+<span id="L29"><span class="lineNum">      29</span>              :             _bankCap,</span>
+<span id="L30"><span class="lineNum">      30</span>              :             _user</span>
+<span id="L31"><span class="lineNum">      31</span>              :         );</span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaUNC">           0 :         vm.stopBroadcast();</span></span>
+<span id="L33"><span class="lineNum">      33</span>              :     }</span>
+<span id="L34"><span class="lineNum">      34</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.3.2-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
