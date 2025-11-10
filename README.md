@@ -6,9 +6,7 @@ El contrato gestiona depósitos de ETH nativo y tokens ERC20, convirtiéndolos a
 ### 📈 Explicación de Mejoras
 
 - 🏧 Contabilidad Unificada en USDC
-Todos los depósitos (ya sea ETH, WETH, u otros ERC20) se intercambian (swappean) automáticamente a USDC en el momento del depósito. El vault solo almacena USDC, y los balances de los usuarios se acreditan en USDC.
-
-Esto resuelve conflictos entre el valor histórico de un depósito y el valor actual del activo. La contabilidad es 1 a 1 en USDC, eliminando el riesgo de fondos bloqueados (por underflow en retiros) o corrupción de saldos.
+Todos los depósitos (ya sea ETH, WETH, u otros ERC20) se intercambian (swappean) automáticamente a USDC en el momento del depósito. El vault solo almacena USDC, y los balances de los usuarios se acreditan en USDC. Esto resuelve conflictos entre el valor histórico de un depósito y el valor actual del activo. La contabilidad es 1 a 1 en USDC, eliminando el riesgo de fondos bloqueados (por underflow en retiros) o corrupción de saldos.
 
 - 🔄 Integración con Uniswap V2
 Se integra IUniswapV2Router02 para manejar todos los swaps de entrada. 
@@ -17,15 +15,11 @@ Esto permite al banco aceptar una gran variedad de tokens sin necesidad de gesti
 - 🛡️ Seguridad y Optimización Mantenidas
 Se preservan (y mejoran) los patrones de seguridad y eficiencia:
 
-Control de Acceso: Uso de AccessControl de OpenZeppelin con un ADMIN_ROLE para funciones críticas (como pause).
+- Control de Acceso: Uso de AccessControl de OpenZeppelin con un ADMIN_ROLE para funciones críticas (como pause).
 
-Protección Anti-Reentrada: Se aplica reentrancyGuard a todas las funciones de depósito y retiro para prevenir ataques de reentrada, cruciales durante las interacciones con Uniswap.
+- Protección Anti-Reentrada: Se aplica reentrancyGuard a todas las funciones de depósito y retiro para prevenir ataques de reentrada, cruciales durante las interacciones con Uniswap.
 
-Optimización de Gas:
-
-Uso unchecked: Las restas de balance en withdrawUsdc son 100% seguras gracias al modificador validWithdrawalAmount.
-
-Se cachea totalBalanceUsdc en memoria (_totalBalanceUsdc).
+- Optimización de Gas: se mejora el uso de unchecked: las restas de balance son seguras gracias al modificador validWithdrawalAmount. Se baja a memoria totalBalanceUsdc (_totalBalanceUsdc).
 
 ### 🚀 Despliegue en Foundry
 
@@ -133,6 +127,8 @@ https://sepolia.etherscan.io/address/0xf7001fa212447658d062fd3b3e8faa4fb7a86ec1#
 
 ### Cobertura de pruebas
 
+<img width="1724" height="305" alt="Captura de pantalla 2025-11-10 a la(s) 4 04 45 a  m" src="https://github.com/user-attachments/assets/fae47b9a-5f3b-4cd7-94b4-1920f2a14961" />
+
 
 #### Métodos de prueba implementados:
 
@@ -142,7 +138,7 @@ Se usó vm.prank para simular transacciones desde direcciones específicas, como
 
 Se utilizó vm.deal para "fabricar" ETH nativo y asignarlo al USER para la prueba de depositEth.
 
-Los siguientes métodos de prueba fueron implementados en test/KipuBankV3.t.sol:
+Los siguientes métodos de prueba fueron implementados en `test/KipuBankV3.t.sol`:
 - testDepositUsdcToken
 - testDepositERC20Token
 - testDepositEth
